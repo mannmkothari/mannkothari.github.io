@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mann Kothari — Mechanical Design Engineer</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0b0e13;
+      --surface: #12161e;
+      --surface2: #1a2030;
+      --border: #232b3a;
+      --accent: #e8c87a;
+      --accent2: #5bc4a0;
+      --accent3: #6fa3e0;
+      --text: #e2e8f0;
+      --muted: #7a8ba0;
+      --dim: #3a4a5e;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Sora', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── GRID NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.15;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: relative;
+      z-index: 10;
+      padding: 80px 48px 60px;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards;
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: #fff;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.1s ease forwards;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .tagline {
+      margin-top: 20px;
+      font-size: 14px;
+      color: var(--muted);
+      max-width: 560px;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.2s ease forwards;
+    }
+
+    .contact-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-top: 36px;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.3s ease forwards;
+    }
+
+    .contact-bar a, .contact-bar span {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s;
+    }
+
+    .contact-bar a:hover { color: var(--accent); }
+
+    .contact-bar .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent2);
+      display: inline-block;
+    }
+
+    /* ── NAV PILLS ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(11,14,19,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 48px;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 0;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    nav ul li a {
+      display: block;
+      padding: 16px 20px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    nav ul li a:hover {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    /* ── MAIN ── */
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 48px 100px;
+    }
+
+    /* ── SECTION ── */
+    section {
+      padding-top: 80px;
+    }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: #fff;
+      margin-bottom: 40px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 20px;
+    }
+
+    /* ── SUMMARY ── */
+    .summary-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 4px;
+      padding: 32px 36px;
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.9;
+      position: relative;
+    }
+
+    .summary-block::before {
+      content: '"';
+      font-family: 'DM Serif Display', serif;
+      font-size: 80px;
+      color: var(--accent);
+      opacity: 0.15;
+      position: absolute;
+      top: -10px;
+      left: 20px;
+      line-height: 1;
+    }
+
+    /* ── PROJECT CARDS ── */
+    .projects-grid {
+      display: grid;
+      gap: 2px;
+    }
+
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.25s;
+      cursor: pointer;
+    }
+
+    .project-card:hover {
+      border-color: var(--accent);
+      transform: translateX(4px);
+    }
+
+    .project-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 28px 32px;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.25s;
+    }
+
+    .project-card:hover .project-header {
+      border-bottom-color: var(--border);
+    }
+
+    .project-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 3rem;
+      color: var(--dim);
+      line-height: 1;
+      min-width: 56px;
+      transition: color 0.25s;
+    }
+
+    .project-card:hover .project-num { color: var(--accent); }
+
+    .project-meta h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.35rem;
+      color: #fff;
+      line-height: 1.3;
+    }
+
+    .project-meta .project-org {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--accent2);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .project-tools {
+      margin-left: auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+
+    .chip {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      padding: 4px 10px;
+      border-radius: 2px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .project-body {
+      display: none;
+      padding: 28px 32px 32px;
+      gap: 24px;
+      grid-template-columns: 1fr 1fr 1fr;
+      border-top: 1px solid var(--border);
+    }
+
+    .project-card.open .project-body {
+      display: grid;
+    }
+
+    .project-col-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent3);
+      margin-bottom: 10px;
+    }
+
+    .project-col p, .project-col li {
+      font-size: 13.5px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .project-col ul { padding-left: 16px; }
+    .project-col li { margin-bottom: 4px; }
+
+    .result-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .result-item::before {
+      content: '→';
+      color: var(--accent);
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    /* ── SKILLS ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .skill-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 24px;
+      transition: border-color 0.25s;
+    }
+
+    .skill-block:hover { border-color: var(--accent3); }
+
+    .skill-block-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent3);
+      margin-bottom: 14px;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .skill-tag {
+      font-size: 12px;
+      color: var(--text);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 4px 10px;
+    }
+
+    /* ── EXPERIENCE ── */
+    .exp-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .exp-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 24px 32px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      transition: border-color 0.25s;
+    }
+
+    .exp-item:hover { border-color: var(--accent2); }
+
+    .exp-bullet {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent2);
+      margin-top: 8px;
+      flex-shrink: 0;
+    }
+
+    .exp-text {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 48px;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    footer p {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--dim);
+    }
+
+    footer a {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── TOGGLE ARROW ── */
+    .toggle-arrow {
+      margin-left: auto;
+      width: 28px; height: 28px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 13px;
+      transition: transform 0.25s, background 0.25s, color 0.25s;
+      flex-shrink: 0;
+    }
+
+    .project-card.open .toggle-arrow {
+      transform: rotate(180deg);
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+    }
+
+    @media (max-width: 700px) {
+      header, nav, main, footer { padding-left: 20px; padding-right: 20px; }
+      .project-body { grid-template-columns: 1fr; }
+      .project-tools { display: none; }
+      h1 { font-size: 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <p class="header-eyebrow">Portfolio · Mechanical Design Engineer</p>
+  <h1>Mann <em>Kothari</em></h1>
+  <p class="tagline">Product Design · Structural & Thermal Analysis · Manufacturing Support · Technical Documentation</p>
+  <div class="contact-bar">
+    <a href="mailto:mmkothar@asu.edu"><span class="dot"></span>mmkothar@asu.edu</a>
+    <a href="tel:3512095130"><span class="dot"></span>351-209-5130</a>
+    <a href="https://www.linkedin.com/in/mannkothari" target="_blank"><span class="dot"></span>linkedin.com/in/mannkothari</a>
+    <span><span class="dot"></span>Westborough, Massachusetts</span>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav>
+  <ul>
+    <li><a href="#summary">Summary</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Highlights</a></li>
+  </ul>
+</nav>
+
+<!-- MAIN -->
+<main>
+
+  <!-- SUMMARY -->
+  <section id="summary">
+    <p class="section-label reveal">About</p>
+    <h2 class="section-title reveal">Professional Summary</h2>
+    <div class="summary-block reveal">
+      Mechanical engineer with hands-on experience in product design, structural and thermal analysis, manufacturing support, and technical documentation. Proven track record of taking systems from concept through release — working across design, manufacturing, and field teams to deliver reliable, manufacturable solutions.
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <p class="section-label reveal">Work</p>
+    <h2 class="section-title reveal">Selected Projects</h2>
+    <div class="projects-grid">
+
+      <!-- Card 1 -->
+      <div class="project-card reveal" onclick="toggle(this)">
+        <div class="project-header">
+          <span class="project-num">01</span>
+          <div class="project-meta">
+            <h3>Design &amp; Analysis of EPC Package</h3>
+            <p class="project-org">ISRO — Satellite Electrical Housing</p>
+          </div>
+          <div class="project-tools">
+            <span class="chip">Autodesk</span>
+            <span class="chip">ANSYS</span>
+            <span class="chip">GD&T</span>
+            <span class="chip">FEA</span>
+          </div>
+          <div class="toggle-arrow">▼</div>
+        </div>
+        <div class="project-body">
+          <div class="project-col">
+            <p class="project-col-label">Objective</p>
+            <p>Design and analyze an electrical power conditioning package (EPC) housing for a satellite application — meeting structural, static load, and thermal requirements.</p>
+          </div>
+          <div class="project-col">
+            <p class="project-col-label">Engineering Approach</p>
+            <ul>
+              <li>Built 3D model in Autodesk; applied GD&T to all drawings</li>
+              <li>Meshed the EPC package for FEA simulations in ANSYS</li>
+              <li>Performed modal, static, and thermal simulations</li>
+              <li>Evaluated stiffness, load resistance, and junction temperature</li>
+            </ul>
+          </div>
+          <div class="project-col">
+            <p class="project-col-label">Results</p>
+            <div class="result-item">Fundamental frequency of <strong>793 Hz</strong> — met stiffness requirement</div>
+            <div class="result-item">Withstood <strong>15 g</strong> steady-state static load</div>
+            <div class="result-item">Max junction temperature <strong>107°C</strong> — within thermal limits</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="project-card reveal" onclick="toggle(this)">
+        <div class="project-header">
+          <span class="project-num">02</span>
+          <div class="project-meta">
+            <h3>Mechanical Architecture of High-Temperature Gas Processing System</h3>
+            <p class="project-org">OneH2 — Subsystem Design &amp; Release</p>
+          </div>
+          <div class="project-tools">
+            <span class="chip">SolidWorks</span>
+            <span class="chip">ANSYS</span>
+            <span class="chip">GD&T</span>
+            <span class="chip">P&IDs</span>
+            <span class="chip">BOM</span>
+          </div>
+          <div class="toggle-arrow">▼</div>
+        </div>
+        <div class="project-body">
+          <div class="project-col">
+            <p class="project-col-label">Objective</p>
+            <p>Lead mechanical design of a high-temperature gas processing subsystem focused on reliability, manufacturability, and smooth design-to-production transition.</p>
+          </div>
+          <div class="project-col">
+            <p class="project-col-label">Engineering Approach</p>
+            <ul>
+              <li>Designed for thermal expansion, pressure loading, and material compatibility</li>
+              <li>Simplified architecture to reduce part count and improve assembly</li>
+              <li>Collaborated with manufacturing for build-ready designs</li>
+              <li>Managed BOMs and engineering changes for configuration control</li>
+            </ul>
+          </div>
+          <div class="project-col">
+            <p class="project-col-label">Results</p>
+            <div class="result-item">Reduced fabrication complexity by <strong>~15–20%</strong></div>
+            <div class="result-item">Improved system reliability and repeatability</div>
+            <div class="result-item">Enabled smoother design-to-production transition</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="project-card reveal" onclick="toggle(this)">
+        <div class="project-header">
+          <span class="project-num">03</span>
+          <div class="project-meta">
+            <h3>Engineering Documentation &amp; System Release</h3>
+            <p class="project-org">OneH2 — P&IDs, Drawings, Technical Docs</p>
+          </div>
+          <div class="project-tools">
+            <span class="chip">AutoCAD</span>
+            <span class="chip">P&IDs</span>
+            <span class="chip">GD&T</span>
+            <span class="chip">ERP/BOM</span>
+          </div>
+          <div class="toggle-arrow">▼</div>
+        </div>
+        <div class="project-body">
+          <div class="project-col">
+            <p class="project-col-label">Objective</p>
+            <p>Standardize engineering documentation and support system release to manufacturing and operations teams.</p>
+          </div>
+          <div class="project-col">
+            <p class="project-col-label">Engineering Approach</p>
+            <ul>
+              <li>Developed and reviewed P&IDs for accuracy and tag consistency</li>
+              <li>Coordinated with electrical, controls, and manufacturing teams</li>
+              <li>Created structured documentation including operation manuals</li>
+              <li>Implemented revision control for full traceability</li>
+            </ul>
+          </div>
+          <div class="project-col">
+            <p class="project-col-label">Results</p>
+            <div class="result-item">Reduced fabrication and commissioning errors</div>
+            <div class="result-item">Improved cross-team communication and clarity</div>
+            <div class="result-item">Accelerated system validation and deployment</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="project-card reveal" onclick="toggle(this)">
+        <div class="project-header">
+          <span class="project-num">04</span>
+          <div class="project-meta">
+            <h3>Stand Body Design — Process Optimization</h3>
+            <p class="project-org">Harish Textile Engineers</p>
+          </div>
+          <div class="project-tools">
+            <span class="chip">SolidWorks</span>
+            <span class="chip">Brake Forming</span>
+            <span class="chip">Die Design</span>
+          </div>
+          <div class="toggle-arrow">▼</div>
+        </div>
+        <div class="project-body">
+          <div class="project-col">
+            <p class="project-col-label">Objective</p>
+            <p>Redesign stand body and tooling to optimize manufacturing productivity and minimize operator error.</p>
+          </div>
+          <div class="project-col">
+            <p class="project-col-label">Engineering Approach</p>
+            <ul>
+              <li>Designed a new die on SolidWorks with improved stand body geometry</li>
+              <li>Manufactured bends via brake forming</li>
+              <li>Tumbled stand body to smoothen exterior finish</li>
+            </ul>
+          </div>
+          <div class="project-col">
+            <p class="project-col-label">Results</p>
+            <div class="result-item">Overhauled existing operational processes with new die</div>
+            <div class="result-item">Favorable labor variance improved by <strong>60%</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="project-card reveal" onclick="toggle(this)">
+        <div class="project-header">
+          <span class="project-num">05</span>
+          <div class="project-meta">
+            <h3>CFD Analysis of Horizontal Axis Wind Turbine Blade</h3>
+            <p class="project-org">Academic — NACA4412 &amp; S809 Aerofoils</p>
+          </div>
+          <div class="project-tools">
+            <span class="chip">CATIA V5</span>
+            <span class="chip">ANSYS Fluent</span>
+            <span class="chip">CFD</span>
+            <span class="chip">k-SST</span>
+          </div>
+          <div class="toggle-arrow">▼</div>
+        </div>
+        <div class="project-body">
+          <div class="project-col">
+            <p class="project-col-label">Objective</p>
+            <p>Perform CFD analysis on a horizontal axis wind turbine blade using NACA4412 and S809 aerofoils to evaluate aerodynamic performance.</p>
+          </div>
+          <div class="project-col">
+            <p class="project-col-label">Engineering Approach</p>
+            <ul>
+              <li>Designed blade geometry in CATIA V5</li>
+              <li>Performed CFD simulation in ANSYS Fluent with k-SST turbulence model</li>
+              <li>Applied blade element theory to evaluate lift/drag behavior</li>
+            </ul>
+          </div>
+          <div class="project-col">
+            <p class="project-col-label">Results</p>
+            <div class="result-item">Improved coefficient of lift and drag by <strong>15%</strong> using blade element theory</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="project-card reveal" onclick="toggle(this)">
+        <div class="project-header">
+          <span class="project-num">06</span>
+          <div class="project-meta">
+            <h3>LU-HAP UAV Conceptual Design</h3>
+            <p class="project-org">NACDEC II — National Aerospace Competition</p>
+          </div>
+          <div class="project-tools">
+            <span class="chip">Li-S Battery</span>
+            <span class="chip">Thin GaAs Solar</span>
+            <span class="chip">LIDAR</span>
+            <span class="chip">DoE</span>
+          </div>
+          <div class="toggle-arrow">▼</div>
+        </div>
+        <div class="project-body">
+          <div class="project-col">
+            <p class="project-col-label">Objective</p>
+            <p>Develop a LIDAR-equipped Unmanned High-Altitude Platform (LU-HAP) for coastal habitat mapping, shoreline change detection, and digital elevation modelling.</p>
+          </div>
+          <div class="project-col">
+            <p class="project-col-label">Engineering Approach</p>
+            <ul>
+              <li>Literature survey on high power density batteries and solar cells</li>
+              <li>Design of Experiment (DoE) comparing energy storage technologies</li>
+              <li>Defined flight plan across 7-day coastal India mission profile</li>
+              <li>Assumed IRA conditions, no crosswinds, twilight LIDAR ops</li>
+            </ul>
+          </div>
+          <div class="project-col">
+            <p class="project-col-label">Results</p>
+            <div class="result-item">Selected Dual-junction Thin GaAs solar cells for high conversion efficiency</div>
+            <div class="result-item">Selected Li-S battery: 435 Wh/kg specific energy, 1200 Wh/l density</div>
+            <div class="result-item">Validated platform for long-endurance surveillance and mapping missions</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <p class="section-label reveal">Capabilities</p>
+    <h2 class="section-title reveal">Technical Skills</h2>
+    <div class="skills-grid">
+      <div class="skill-block reveal">
+        <p class="skill-block-label">CAD &amp; Design</p>
+        <div class="skill-tags">
+          <span class="skill-tag">SolidWorks</span>
+          <span class="skill-tag">CATIA V5</span>
+          <span class="skill-tag">AutoCAD</span>
+          <span class="skill-tag">Autodesk</span>
+        </div>
+      </div>
+      <div class="skill-block reveal">
+        <p class="skill-block-label">Analysis</p>
+        <div class="skill-tags">
+          <span class="skill-tag">ANSYS Workbench</span>
+          <span class="skill-tag">ANSYS Fluent</span>
+          <span class="skill-tag">FEA</span>
+          <span class="skill-tag">CFD</span>
+          <span class="skill-tag">Thermal Analysis</span>
+        </div>
+      </div>
+      <div class="skill-block reveal">
+        <p class="skill-block-label">Engineering Methods</p>
+        <div class="skill-tags">
+          <span class="skill-tag">GD&T</span>
+          <span class="skill-tag">Design Optimization</span>
+          <span class="skill-tag">Testing</span>
+          <span class="skill-tag">Manufacturing Support</span>
+        </div>
+      </div>
+      <div class="skill-block reveal">
+        <p class="skill-block-label">Documentation</p>
+        <div class="skill-tags">
+          <span class="skill-tag">P&IDs</span>
+          <span class="skill-tag">Drawing Packages</span>
+          <span class="skill-tag">BOM Management</span>
+          <span class="skill-tag">Technical Manuals</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE HIGHLIGHTS -->
+  <section id="experience">
+    <p class="section-label reveal">Background</p>
+    <h2 class="section-title reveal">Experience Highlights</h2>
+    <div class="exp-list">
+      <div class="exp-item reveal">
+        <div class="exp-bullet"></div>
+        <p class="exp-text">Led mechanical design and subsystem development for production-grade systems, owning work from concept through release.</p>
+      </div>
+      <div class="exp-item reveal">
+        <div class="exp-bullet"></div>
+        <p class="exp-text">Managed drawing releases, BOM updates, and engineering documentation for configuration-controlled programs.</p>
+      </div>
+      <div class="exp-item reveal">
+        <div class="exp-bullet"></div>
+        <p class="exp-text">Supported testing, troubleshooting, and product validation in collaboration with manufacturing and field teams.</p>
+      </div>
+      <div class="exp-item reveal">
+        <div class="exp-bullet"></div>
+        <p class="exp-text">Worked cross-functionally with manufacturing, suppliers, controls, and electrical teams to ship reliable, manufacturable designs.</p>
+      </div>
+      <div class="exp-item reveal">
+        <div class="exp-bullet"></div>
+        <p class="exp-text">Delivered structural, thermal, and CFD analysis using ANSYS across aerospace and industrial applications.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Mann Kothari · Mechanical Design Engineer</p>
+  <a href="https://www.linkedin.com/in/mannkothari" target="_blank">linkedin.com/in/mannkothari</a>
+</footer>
+
+<script>
+  // Card toggle
+  function toggle(card) {
+    card.classList.toggle('open');
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
